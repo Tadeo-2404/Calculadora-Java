@@ -4,17 +4,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class Calculadora  implements ActionListener {
-    JFrame frame;
-    JTextField input;
-    JButton[] numerosArr = new JButton[10];
-    JButton[] funcionesArr = new JButton[8];
-    JButton sumar,restar,dividir,multiplicar;
-    JButton decimal, igual, borrar, limpiar;
-    JPanel containerNumeros = new JPanel();
-    JPanel containerFunciones = new JPanel();
-    Font font = new Font("Monaco", Font.BOLD, 25);
-    char operacion;
-    double numero, numeroAux, resultado;
+    JFrame frame; //frame principal
+    JTextField input; //input calculadora
+    JButton[] numerosArr = new JButton[10]; //arreglo de numeros
+    JButton[] funcionesArr = new JButton[8]; //arreglo de funciones
+    JButton sumar,restar,dividir,multiplicar; //botones de operaciones
+    JButton decimal, igual, borrar, limpiar; //botones de funciones
+    JButton botonCero; //boton numero 0
+    JPanel containerNumeros = new JPanel(); //contenedor botones numeros
+    JPanel containerFunciones = new JPanel(); //contenedor botones funciones
+    Font font = new Font("Monaco", Font.BOLD, 25); //tipo de letra
+    char operacion; //tipo de operacion
+    double numero, numeroAux, resultado; //variables
 
     Calculadora() {
         //JFrame configuracion
@@ -62,6 +63,7 @@ public class Calculadora  implements ActionListener {
         funcionesArr[6] = borrar;
         funcionesArr[7] = limpiar;
 
+        //layout containerFunciones
         containerFunciones.setLayout(new GridLayout(2, 4, 5,5));
         containerFunciones.setBounds(10, 80, 290, 85);
 
@@ -72,12 +74,14 @@ public class Calculadora  implements ActionListener {
             funcionesArr[i].setFocusable(false);
             funcionesArr[i].setBackground(new Color(255, 243, 7));
 
+            //si es igual a Del o CE la letra sera mas pequeña
             if (i == 6 || i == 7) {
                 Font fontF = new Font("Monaco", Font.BOLD, 20);
                 funcionesArr[i].setFont(fontF);
             }
         }
 
+        //layout containerNumeros
         containerNumeros.setLayout(new GridLayout(4,3, 5, 5));
         containerNumeros.setBounds(10, 170, 290, 200);
 
@@ -91,8 +95,18 @@ public class Calculadora  implements ActionListener {
             containerNumeros.add(numerosArr[i]);
         }
 
-        frame.add(containerNumeros);
-        frame.add(containerFunciones);
+        //configuracion boton 0
+        botonCero = new JButton("0");
+        botonCero.setBounds(10, 324, 290, 50);
+        botonCero.setFont(font);
+        botonCero.addActionListener(this);
+        botonCero.setFocusable(false);
+        botonCero.setBackground(new Color(255, 243, 7));
+
+        //agregar atributos al frame
+        frame.add(botonCero); //agregar boton 0
+        frame.add(containerNumeros); //agregar containerNumeros
+        frame.add(containerFunciones);//agregar containerFunciones
         frame.add(input); //agregar input
         frame.setVisible(true); //visibilidad
     }
@@ -108,6 +122,15 @@ public class Calculadora  implements ActionListener {
                 }
                 input.setText(input.getText().concat(String.valueOf(i)));
             }
+        }
+
+        //boton Cero
+        if(e.getSource()==botonCero) {
+            if(resultado > 0) {
+                input.setText("");
+                resultado=0;
+            }
+            input.setText(input.getText().concat("0"));
         }
 
         //boton sumar
@@ -188,6 +211,6 @@ public class Calculadora  implements ActionListener {
     }
 
     public static void main(String[] args) {
-        new Calculadora();
+        new Calculadora(); //nueva instancia de calculadora
     }
 }
