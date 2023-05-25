@@ -13,6 +13,8 @@ public class Calculadora  implements ActionListener {
     JPanel containerNumeros = new JPanel();
     JPanel containerFunciones = new JPanel();
     Font font = new Font("Monaco", Font.BOLD, 25);
+    char operacion;
+    double numero, numeroAux, resultado;
 
     Calculadora() {
         //JFrame configuracion
@@ -20,6 +22,7 @@ public class Calculadora  implements ActionListener {
         frame.setTitle("Calculadora"); //titulo
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //cerrar
         frame.setLayout(null); //layout
+        frame.setResizable(false);
         frame.setBackground(new Color(154, 154, 154)); //color
         frame.setSize(320, 420); //tamaño
 
@@ -75,7 +78,7 @@ public class Calculadora  implements ActionListener {
             }
         }
 
-        containerNumeros.setLayout(new GridLayout(3,3, 5, 5));
+        containerNumeros.setLayout(new GridLayout(4,3, 5, 5));
         containerNumeros.setBounds(10, 170, 290, 200);
 
         //botones numeros
@@ -96,7 +99,92 @@ public class Calculadora  implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        //mostrar digitos
+        for (int i = 0; i < 10; i++) {
+            if(e.getSource() == numerosArr[i]) {
+                if(resultado > 0) {
+                    input.setText("");
+                    resultado=0;
+                }
+                input.setText(input.getText().concat(String.valueOf(i)));
+            }
+        }
 
+        //boton sumar
+        if(e.getSource() == sumar) {
+            numero = Double.parseDouble(input.getText());
+            operacion='+';
+            input.setText("");
+        }
+
+        //boton restar
+        if(e.getSource() == restar) {
+            numero = Double.parseDouble(input.getText());
+            operacion='-';
+            input.setText("");
+        }
+
+        //boton multiplicar
+        if(e.getSource() == multiplicar) {
+            numero = Double.parseDouble(input.getText());
+            operacion='*';
+            input.setText("");
+        }
+
+        //boton dividir
+        if(e.getSource() == dividir) {
+            numero = Double.parseDouble(input.getText());
+            operacion='/';
+            input.setText("");
+        }
+
+        //boton decimales
+        if(e.getSource() == decimal) {
+            input.setText(input.getText().concat("."));
+        }
+
+        //boton limpiar
+        if(e.getSource() == limpiar) {
+            input.setText("");
+            numero=0;
+            resultado=0;
+            numeroAux=0;
+        }
+
+        //boton borra
+        if(e.getSource() == borrar) {
+            String string = input.getText();
+            input.setText("");
+            for (int i = 0; i < string.length()-1; i++) {
+                input.setText(input.getText()+string.charAt(i));
+                if(i == 0) {
+                    numero=0;
+                    resultado=0;
+                    numeroAux=0;
+                }
+            }
+        }
+
+        //operaciones
+        if(e.getSource() == igual) {
+            numeroAux = Double.parseDouble(input.getText());
+            switch (operacion) {
+                case '+':
+                    resultado = numero+numeroAux;
+                    break;
+                case '-':
+                    resultado = numero-numeroAux;
+                    break;
+                case '/':
+                    resultado = numero/numeroAux;
+                    break;
+                case '*':
+                    resultado = numero*numeroAux;
+                    break;
+            }
+            input.setText(String.valueOf(resultado));
+            numero=resultado;
+        }
     }
 
     public static void main(String[] args) {
